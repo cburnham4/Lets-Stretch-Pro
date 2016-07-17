@@ -72,13 +72,14 @@ public class UpdateRoutineInBackground extends AsyncTask<Void, Void, Void> {
             ContentValues cv = new ContentValues();
 
             /* Check on the stretch id */
+            Log.i(TAG, String.format("Stretch ID1: %d", stretch.getId()));
             cv.put(DBTableConstants.STRETCH_ID, stretch.getId());
             cv.put(DBTableConstants.STRETCH_NAME, stretch.getName());
             cv.put(DBTableConstants.STRETCH_IMAGE, bytes);
             cv.put(DBTableConstants.STRETCH_DURATION, stretch.getDuration());
             cv.put(DBTableConstants.STRETCH_INSTRUCTION, stretch.getInstructions());
             int stretchId = (int) db.insertWithOnConflict(DBTableConstants.STRETCH_TABLE_NAME, null, cv, SQLiteDatabase.CONFLICT_REPLACE);
-
+            Log.i(TAG, String.format("Stretch ID2: %d", stretchId));
             /* TODO check stretch id */
             db.close();
 
