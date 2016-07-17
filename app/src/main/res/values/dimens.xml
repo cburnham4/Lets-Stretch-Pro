@@ -25,7 +25,8 @@
     <dimen name="stretch_timer_text_size">48sp</dimen>
 
     <!-- Create Custom Routine Activity -->
-    <dimen name="routine_image_w_h">112dp</dimen>
+    <dimen name="create_routine_image_margin">6dp</dimen>
+    <dimen name="routine_image_w_h">108dp</dimen>
     <dimen name="edit_name_padding">4dp</dimen>
     <dimen name="dialog_margin">24dp</dimen>
     <dimen name="dialog_title_size">20sp</dimen>

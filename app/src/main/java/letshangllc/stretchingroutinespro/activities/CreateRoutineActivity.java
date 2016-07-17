@@ -220,11 +220,15 @@ public class CreateRoutineActivity extends AppCompatActivity {
                 stretch.setName(name);
                 stretch.setDuration(duration);
                 stretch.setInstructions(description);
-                stretch.bitmap = bitmap;
+                stretch.setBitmap(bitmap);
                 stretchesAdapter.notifyDataSetChanged();
             }
         });
         editStretchDialog.show(getSupportFragmentManager(), TAG);
+    }
+
+    public void changeRoutinePhotoOnClick(View view){
+
     }
 
 

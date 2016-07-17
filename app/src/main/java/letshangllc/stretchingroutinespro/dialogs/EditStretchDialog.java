@@ -69,7 +69,7 @@ public class EditStretchDialog extends DialogFragment {
         etDescription.setText(currentStretch.getInstructions());
         etName.setText(currentStretch.getName());
 
-        if(currentStretch.bitmap != null){
+        if(currentStretch.getBitmap() != null){
             tvPhotoUploaded.setVisibility(View.VISIBLE);
         }
 

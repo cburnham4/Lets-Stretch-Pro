@@ -50,8 +50,10 @@ public class StretchesAdapter extends ArrayAdapter<Stretch> {
         }
         // Populate the data into the template view using the data object
 
-        if(item.bitmap != null){
-            viewHolder.stretchImg.setImageBitmap(item.bitmap);
+        if(item.getBitmap() != null){
+            viewHolder.stretchImg.setImageBitmap(item.getBitmap());
+        }else {
+            viewHolder.stretchImg.setImageBitmap(null);
         }
 
         viewHolder.tvName.setText(item.getName());

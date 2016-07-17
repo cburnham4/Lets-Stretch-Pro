@@ -64,8 +64,8 @@ public class StoreRoutineInBackground  extends AsyncTask<Void, Void, Void> {
         /* Add each stretch to the routine */
         for (Stretch stretch : stretches) {
             byte[] bytes = null;
-            if (stretch.bitmap != null) {
-                bytes = DbBitmapUtility.getBytes(stretch.bitmap);
+            if (stretch.getBitmap() != null) {
+                bytes = DbBitmapUtility.getBytes(stretch.getBitmap());
             }
             SQLiteDatabase db = stretchesDBHelper.getWritableDatabase();
             /* Insert stretch into db */

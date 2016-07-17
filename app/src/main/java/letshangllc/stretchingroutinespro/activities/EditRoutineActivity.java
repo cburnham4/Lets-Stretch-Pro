@@ -276,7 +276,7 @@ public class EditRoutineActivity extends AppCompatActivity {
                 stretch.setName(name);
                 stretch.setDuration(duration);
                 stretch.setInstructions(description);
-                stretch.bitmap = bitmap;
+                stretch.setBitmap(bitmap);
                 stretchesAdapter.notifyDataSetChanged();
             }
         });

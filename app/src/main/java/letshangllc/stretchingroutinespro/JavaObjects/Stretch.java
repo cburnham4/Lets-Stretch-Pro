@@ -10,8 +10,8 @@ public class Stretch {
     private String instructions;
     private int drawableIndex = 0;
     private int duration;
-    public Bitmap bitmap;
-    public int id;
+    private Bitmap bitmap;
+    private int id;
 
     public Stretch(String name, String instructions, int duration, Bitmap bitmap, int id) {
         this.name = name;
@@ -39,6 +39,22 @@ public class Stretch {
         this.name = name;
         this.instructions = instructions;
         this.duration = duration;
+    }
+
+    public Bitmap getBitmap() {
+        return bitmap;
+    }
+
+    public void setBitmap(Bitmap bitmap) {
+        this.bitmap = bitmap;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getName() {

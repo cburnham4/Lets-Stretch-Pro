@@ -98,9 +98,9 @@ public class StretchActivity extends AppCompatActivity {
         Stretch stretch = stretches.get(currentStretch);
         tv_stretchName.setText(stretch.getName());
         tv_instructions.setText(stretch.getInstructions());
-        if(stretch.bitmap != null){
+        if(stretch.getBitmap() != null){
             img_stretch.setVisibility(View.VISIBLE);
-            img_stretch.setImageBitmap(stretch.bitmap);
+            img_stretch.setImageBitmap(stretch.getBitmap());
         }else if(stretch.getDrawableIndex() == 0){
             img_stretch.setVisibility(View.INVISIBLE);
         }else{
