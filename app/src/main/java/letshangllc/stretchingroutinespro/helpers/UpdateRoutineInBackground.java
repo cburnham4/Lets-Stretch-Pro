@@ -73,7 +73,9 @@ public class UpdateRoutineInBackground extends AsyncTask<Void, Void, Void> {
 
             /* Check on the stretch id */
             Log.i(TAG, String.format("Stretch ID1: %d", stretch.getId()));
-            cv.put(DBTableConstants.STRETCH_ID, stretch.getId());
+            if(stretch.getId()!=0) {
+                cv.put(DBTableConstants.STRETCH_ID, stretch.getId());
+            }
             cv.put(DBTableConstants.STRETCH_NAME, stretch.getName());
             cv.put(DBTableConstants.STRETCH_IMAGE, bytes);
             cv.put(DBTableConstants.STRETCH_DURATION, stretch.getDuration());
