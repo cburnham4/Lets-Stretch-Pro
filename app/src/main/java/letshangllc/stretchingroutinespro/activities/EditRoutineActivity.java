@@ -1,5 +1,6 @@
 package letshangllc.stretchingroutinespro.activities;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.ContentValues;
 import android.content.DialogInterface;
@@ -7,7 +8,9 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -19,11 +22,14 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
+import letshangllc.stretchingroutinespro.JavaObjects.RoutineItem;
 import letshangllc.stretchingroutinespro.data.DBTableConstants;
 import letshangllc.stretchingroutinespro.data.StretchesDBHelper;
 import letshangllc.stretchingroutinespro.JavaObjects.Stretch;
@@ -40,8 +46,10 @@ public class EditRoutineActivity extends AppCompatActivity {
 
     private ArrayList<Stretch> stretches;
 
-    /* ListView for the stretches */
+    /* Views */
     private ListView lvStretches;
+    private EditText etRoutineName;
+    private ImageView imgRoutine;
 
     /* ListView Adapter*/
     private StretchesAdapter stretchesAdapter;
@@ -49,15 +57,15 @@ public class EditRoutineActivity extends AppCompatActivity {
     /* DataBaseHelper */
     private StretchesDBHelper stretchesDBHelper;
 
-    /* Routine Name EditText */
-    private EditText etRoutineName;
-
     /* Progress Dialog */
     private ProgressDialog progressDialog;
+
+    private static final int SELECT_ROUTINE_PICTURE = 2;
 
     /* Routine */
     private String routineName;
     private int routineId;
+    private Bitmap routineBitmap;
 
 
     @Override
@@ -107,6 +115,28 @@ public class EditRoutineActivity extends AppCompatActivity {
 
         etRoutineName = (EditText) findViewById(R.id.etRoutineName);
         etRoutineName.setText(routineName);
+
+        imgRoutine = (ImageView) findViewById(R.id.imgRoutine);
+        /* todo set img from routine */
+        setRoutineImage();
+    }
+
+    /* Get the routine image from the db and put it in the DB */
+    private void setRoutineImage(){
+        SQLiteDatabase sqLiteDatabase = stretchesDBHelper.getReadableDatabase();
+
+        String[] projection = {DBTableConstants.ROUTINE_IMAGE};
+
+        Cursor c = sqLiteDatabase.query(DBTableConstants.ROUTINE_TABLE_NAME, projection,
+                DBTableConstants.ROUTINE_ID + " = " + routineId,null, null, null, null);
+        c.moveToFirst();
+
+        byte[] bytes = c.getBlob(0);
+        c.close();
+        if(bytes!=null){
+            imgRoutine.setImageBitmap(DbBitmapUtility.getImage(bytes));
+        };
+
     }
 
     public void getStretches(){
@@ -193,6 +223,9 @@ public class EditRoutineActivity extends AppCompatActivity {
 
         ContentValues cv = new ContentValues();
         cv.put(DBTableConstants.ROUTINE_NAME, routineName);
+        if(routineBitmap!=null){
+            cv.put(DBTableConstants.ROUTINE_IMAGE, DbBitmapUtility.getBytes(routineBitmap));
+        }
 
         db.update(DBTableConstants.ROUTINE_TABLE_NAME, cv,
                 DBTableConstants.ROUTINE_ID +" = "+ routineId, null);
@@ -283,7 +316,52 @@ public class EditRoutineActivity extends AppCompatActivity {
         editStretchDialog.show(getSupportFragmentManager(), TAG);
     }
 
+    public void changeRoutinePhotoOnClick(View view){
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(Intent.createChooser(intent,
+                "Select Picture"), SELECT_ROUTINE_PICTURE);
+    }
 
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == Activity.RESULT_OK) {
+            Log.i(TAG, "RESULT_OKAY");
+            if (requestCode == SELECT_ROUTINE_PICTURE) {
+                if(data == null ){
+                    Log.e(TAG, "Data Null");
+                }
+                routineBitmap = null;
+                try {
+                    Uri selectedImageUri = data.getData();
+                    String selectedImagePath = selectedImageUri.getPath();
+                    Log.i(TAG, "PATH: " + selectedImagePath);
+                    Bitmap bitmap1 = (Bitmap) MediaStore.Images.Media.getBitmap(this.getContentResolver(), data.getData());
+                    double width = bitmap1.getWidth()* 1.0;
+                    double height = bitmap1.getHeight() * 1.0;
+
+                    double largestXY = 512.0;
+                    if(width>largestXY || height>largestXY){
+                        if(width>height){
+                            double scale = largestXY/height;
+                            routineBitmap = Bitmap.createScaledBitmap(bitmap1,(int) (scale*width),
+                                    (int)  (height*scale), true);
+                        }else{
+                            double scale = largestXY/width;
+                            routineBitmap = Bitmap.createScaledBitmap(bitmap1,(int) (scale*width),
+                                    (int)  (height*scale), true);
+                        }
+
+                    }
+
+                    imgRoutine.setImageBitmap(routineBitmap);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
 
 
 }

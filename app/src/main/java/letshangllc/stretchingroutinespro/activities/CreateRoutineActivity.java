@@ -252,7 +252,9 @@ public class CreateRoutineActivity extends AppCompatActivity {
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Activity.RESULT_OK) {
+            Log.i(TAG, "Selected Photo");
             if (requestCode == SELECT_ROUTINE_PICTURE) {
                 if(data == null ){
                     Log.e(TAG, "Data Null");

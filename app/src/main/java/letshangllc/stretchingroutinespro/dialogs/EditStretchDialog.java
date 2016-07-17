@@ -79,8 +79,9 @@ public class EditStretchDialog extends DialogFragment {
                 Intent intent = new Intent();
                 intent.setType("image/*");
                 intent.setAction(Intent.ACTION_GET_CONTENT);
-                startActivityForResult(Intent.createChooser(intent,
+                EditStretchDialog.this.startActivityForResult(Intent.createChooser(intent,
                         "Select Picture"), SELECT_PICTURE);
+
             }
         });
 
@@ -124,7 +125,9 @@ public class EditStretchDialog extends DialogFragment {
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == Activity.RESULT_OK) {
+            Log.i(TAG, "Selected Photo");
             if (requestCode == SELECT_PICTURE) {
+                Log.i(TAG, "Selected Photo");
                 if(data == null ){
                     Log.e(TAG, "Data Null");
                 }

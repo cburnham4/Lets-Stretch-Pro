@@ -107,7 +107,9 @@ public class AddStretchDialog extends DialogFragment {
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == Activity.RESULT_OK) {
+            Log.i(TAG, "RESULT OKAY");
             if (requestCode == SELECT_PICTURE) {
+                Log.i(TAG, "Selected Photo");
                 if(data == null ){
                     Log.e(TAG, "Data Null");
                 }
