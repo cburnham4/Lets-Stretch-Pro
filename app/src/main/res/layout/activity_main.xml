@@ -9,6 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@+id/btnCreateRoutine"
+        android:layout_alignParentTop="true"
         android:orientation="vertical">
 
         <ImageView
@@ -50,14 +51,12 @@
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/ad_layout"
+        android:layout_alignParentBottom="true"
         android:id="@+id/btnCreateRoutine"
         android:onClick="createRoutineOnClick"
         android:background="@drawable/btn_background_border"
         android:text="@string/create_custom_routine"/>
 
-
-    <include layout="@layout/ad_layout"/>
 
 
 </RelativeLayout>

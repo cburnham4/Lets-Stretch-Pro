@@ -1,4 +1,4 @@
-package letshangllc.stretchingroutines.dialogs;
+package letshangllc.stretchingroutinespro.dialogs;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -21,8 +21,8 @@ import android.widget.Toast;
 import java.io.IOException;
 import java.util.Locale;
 
-import letshangllc.stretchingroutines.JavaObjects.Stretch;
-import letshangllc.stretchingroutines.R;
+import letshangllc.stretchingroutinespro.JavaObjects.Stretch;
+import letshangllc.stretchingroutinespro.R;
 
 /**
  * Created by cvburnha on 6/21/2016.

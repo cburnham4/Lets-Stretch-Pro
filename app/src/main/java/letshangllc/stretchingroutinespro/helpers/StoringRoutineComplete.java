@@ -1,4 +1,4 @@
-package letshangllc.stretchingroutines.helpers;
+package letshangllc.stretchingroutinespro.helpers;
 
 /**
  * Created by Carl on 7/16/2016.

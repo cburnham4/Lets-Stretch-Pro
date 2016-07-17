@@ -1,4 +1,4 @@
-package letshangllc.stretchingroutines.JavaObjects;
+package letshangllc.stretchingroutinespro.JavaObjects;
 
 import android.graphics.Bitmap;
 

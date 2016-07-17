@@ -1,7 +1,6 @@
-package letshangllc.stretchingroutines.JavaObjects;
+package letshangllc.stretchingroutinespro.JavaObjects;
 
 import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
 
 /**
  * Created by cvburnha on 4/12/2016.

@@ -1,4 +1,4 @@
-package letshangllc.stretchingroutines.Activities;
+package letshangllc.stretchingroutinespro.activities;
 
 import android.app.ProgressDialog;
 import android.content.ContentValues;
@@ -22,15 +22,15 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
-import letshangllc.stretchingroutines.Data.DBTableConstants;
-import letshangllc.stretchingroutines.Data.StretchesDBHelper;
-import letshangllc.stretchingroutines.JavaObjects.Stretch;
-import letshangllc.stretchingroutines.R;
-import letshangllc.stretchingroutines.adapaters.StretchesAdapter;
-import letshangllc.stretchingroutines.dialogs.AddStretchDialog;
-import letshangllc.stretchingroutines.dialogs.EditStretchDialog;
-import letshangllc.stretchingroutines.helpers.StoreRoutineInBackground;
-import letshangllc.stretchingroutines.helpers.StoringRoutineComplete;
+import letshangllc.stretchingroutinespro.Data.DBTableConstants;
+import letshangllc.stretchingroutinespro.Data.StretchesDBHelper;
+import letshangllc.stretchingroutinespro.JavaObjects.Stretch;
+import letshangllc.stretchingroutinespro.R;
+import letshangllc.stretchingroutinespro.adapaters.StretchesAdapter;
+import letshangllc.stretchingroutinespro.dialogs.AddStretchDialog;
+import letshangllc.stretchingroutinespro.dialogs.EditStretchDialog;
+import letshangllc.stretchingroutinespro.helpers.StoreRoutineInBackground;
+import letshangllc.stretchingroutinespro.helpers.StoringRoutineComplete;
 
 public class CreateRoutineActivity extends AppCompatActivity {
     private static final String TAG = CreateRoutineActivity.class.getSimpleName();
@@ -174,12 +174,12 @@ public class CreateRoutineActivity extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 /* Finish the exercise upon discarding */
-                finish();
+                dialog.cancel();
             }
         }).setNegativeButton(R.string.discard, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                dialog.cancel();
+                finish();
             }
         });
         AlertDialog alertDialog = builder.create();

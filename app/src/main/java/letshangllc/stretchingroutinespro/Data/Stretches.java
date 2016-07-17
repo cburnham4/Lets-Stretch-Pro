@@ -1,7 +1,7 @@
-package letshangllc.stretchingroutines.Data;
+package letshangllc.stretchingroutinespro.Data;
 
-import letshangllc.stretchingroutines.JavaObjects.Stretch;
-import letshangllc.stretchingroutines.R;
+import letshangllc.stretchingroutinespro.JavaObjects.Stretch;
+import letshangllc.stretchingroutinespro.R;
 
 /**
  * Created by cvburnha on 4/14/2016.

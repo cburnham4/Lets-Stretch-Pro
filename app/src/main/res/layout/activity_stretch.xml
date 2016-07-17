@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_marginTop="@dimen/stretch_top_margin"
-    tools:context=".Activities.StretchActivity">
+    tools:context=".activities.StretchActivity">
 
     <TextView
         android:layout_width="match_parent"
@@ -34,7 +34,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/ad_layout">
+        android:layout_alignParentBottom="true">
 
         <TextView
             android:layout_width="match_parent"
@@ -56,8 +56,5 @@
             android:onClick="nextExerciseOnClick"/>
     </RelativeLayout>
 
-
-
-    <include layout="@layout/ad_layout"/>
 
 </RelativeLayout>

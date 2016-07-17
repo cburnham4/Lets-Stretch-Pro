@@ -1,4 +1,4 @@
-package letshangllc.stretchingroutines.helpers;
+package letshangllc.stretchingroutinespro.helpers;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;

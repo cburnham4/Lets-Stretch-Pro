@@ -1,4 +1,4 @@
-package letshangllc.stretchingroutines;
+package letshangllc.stretchingroutinespro;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;

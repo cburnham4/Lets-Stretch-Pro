@@ -1,15 +1,13 @@
-package letshangllc.stretchingroutines.Activities;
+package letshangllc.stretchingroutinespro.activities;
 
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
-import android.os.Handler;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.MenuInflater;
@@ -20,17 +18,14 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.Timer;
-import java.util.TimerTask;
 
-import letshangllc.stretchingroutines.AdsHelper;
-import letshangllc.stretchingroutines.Data.DBTableConstants;
-import letshangllc.stretchingroutines.Data.Routines;
-import letshangllc.stretchingroutines.Data.StretchesDBHelper;
-import letshangllc.stretchingroutines.R;
-import letshangllc.stretchingroutines.JavaObjects.RoutineItem;
-import letshangllc.stretchingroutines.adapaters.RoutineListAdapter;
-import letshangllc.stretchingroutines.helpers.DbBitmapUtility;
+import letshangllc.stretchingroutinespro.Data.DBTableConstants;
+import letshangllc.stretchingroutinespro.Data.Routines;
+import letshangllc.stretchingroutinespro.Data.StretchesDBHelper;
+import letshangllc.stretchingroutinespro.R;
+import letshangllc.stretchingroutinespro.JavaObjects.RoutineItem;
+import letshangllc.stretchingroutinespro.adapaters.RoutineListAdapter;
+import letshangllc.stretchingroutinespro.helpers.DbBitmapUtility;
 
 public class MainActivity extends AppCompatActivity {
     private String TAG = MainActivity.class.getSimpleName();
@@ -84,27 +79,6 @@ public class MainActivity extends AppCompatActivity {
     public void createRoutineOnClick(View view){
         Intent intent = new Intent(this, CreateRoutineActivity.class);
         startActivity(intent);
-    }
-
-    /* ADS */
-    private AdsHelper adsHelper;
-    private Handler handler = new Handler();
-
-    private Runnable runnable = new Runnable() {
-        @Override
-        public void run() {
-      /* do what you need to do */
-            adsHelper.refreshAd();
-      /* and here comes the "trick" */
-            handler.postDelayed(this, getResources().getInteger(R.integer.ad_refresh_rate));
-        }
-    };
-
-
-    private void runAds(){
-        adsHelper =  new AdsHelper(this.getWindow().getDecorView(), getResources().getString(R.string.admob_id_routines), this);
-        adsHelper.setUpAds();
-        handler.postDelayed(runnable, 100);
     }
 
     @Override

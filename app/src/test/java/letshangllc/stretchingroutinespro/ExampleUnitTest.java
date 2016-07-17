@@ -1,4 +1,4 @@
-package letshangllc.stretchingroutines;
+package letshangllc.stretchingroutinespro;
 
 import org.junit.Test;
 

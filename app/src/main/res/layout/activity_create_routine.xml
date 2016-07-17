@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-         tools:context=".Activities.CreateRoutineActivity">
+         tools:context=".activities.CreateRoutineActivity">
 
     <include layout="@layout/toolbar"/>
     <ScrollView
@@ -61,9 +61,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/lvStretches"
+
         android:layout_below="@+id/scrollView"
-        android:layout_above="@+id/ad_layout"/>
+        />
 
-
-    <include layout="@layout/ad_layout"/>
 </RelativeLayout>

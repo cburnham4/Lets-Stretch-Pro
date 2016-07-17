@@ -1,4 +1,4 @@
-package letshangllc.stretchingroutines.Activities;
+package letshangllc.stretchingroutinespro.activities;
 
 import android.content.Intent;
 import android.database.Cursor;
@@ -9,7 +9,6 @@ import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.CountDownTimer;
-import android.os.Handler;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -22,13 +21,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Locale;
 
-import letshangllc.stretchingroutines.AdsHelper;
-import letshangllc.stretchingroutines.Data.DBTableConstants;
-import letshangllc.stretchingroutines.Data.RoutineStretches;
-import letshangllc.stretchingroutines.Data.StretchesDBHelper;
-import letshangllc.stretchingroutines.JavaObjects.Stretch;
-import letshangllc.stretchingroutines.R;
-import letshangllc.stretchingroutines.helpers.DbBitmapUtility;
+import letshangllc.stretchingroutinespro.Data.DBTableConstants;
+import letshangllc.stretchingroutinespro.Data.RoutineStretches;
+import letshangllc.stretchingroutinespro.Data.StretchesDBHelper;
+import letshangllc.stretchingroutinespro.JavaObjects.Stretch;
+import letshangllc.stretchingroutinespro.R;
+import letshangllc.stretchingroutinespro.helpers.DbBitmapUtility;
 
 public class StretchActivity extends AppCompatActivity {
     private static final String TAG = StretchActivity.class.getSimpleName();
@@ -83,8 +81,6 @@ public class StretchActivity extends AppCompatActivity {
 
 
         startStretches();
-
-        this.runAds();
     }
 
     private void findViews(){
@@ -228,27 +224,5 @@ public class StretchActivity extends AppCompatActivity {
         countDownTimer.cancel();
         finish();
     }
-
-
-    private AdsHelper adsHelper;
-    private Handler handler = new Handler();
-
-    private Runnable runnable = new Runnable() {
-        @Override
-        public void run() {
-      /* do what you need to do */
-            adsHelper.refreshAd();
-      /* and here comes the "trick" */
-            handler.postDelayed(this, getResources().getInteger(R.integer.ad_refresh_rate));
-        }
-    };
-
-
-    public void runAds(){
-        adsHelper =  new AdsHelper(this.getWindow().getDecorView(), getResources().getString(R.string.admob_id_stretches), this);
-        adsHelper.setUpAds();
-        handler.postDelayed(runnable, 100);
-    }
-
 
 }

@@ -1,4 +1,4 @@
-package letshangllc.stretchingroutines.adapaters;
+package letshangllc.stretchingroutinespro.adapaters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -11,8 +11,8 @@ import java.util.ArrayList;
 import java.util.Locale;
 
 import de.hdodenhof.circleimageview.CircleImageView;
-import letshangllc.stretchingroutines.JavaObjects.Stretch;
-import letshangllc.stretchingroutines.R;
+import letshangllc.stretchingroutinespro.JavaObjects.Stretch;
+import letshangllc.stretchingroutinespro.R;
 
 /**
  * Created by cvburnha on 6/21/2016.

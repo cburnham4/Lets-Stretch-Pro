@@ -1,4 +1,4 @@
-package letshangllc.stretchingroutines.helpers;
+package letshangllc.stretchingroutinespro.helpers;
 
 import android.app.ProgressDialog;
 import android.content.ContentValues;
@@ -9,15 +9,15 @@ import android.util.Log;
 
 import java.util.ArrayList;
 
-import letshangllc.stretchingroutines.Data.DBTableConstants;
-import letshangllc.stretchingroutines.Data.StretchesDBHelper;
-import letshangllc.stretchingroutines.JavaObjects.Stretch;
+import letshangllc.stretchingroutinespro.Data.DBTableConstants;
+import letshangllc.stretchingroutinespro.Data.StretchesDBHelper;
+import letshangllc.stretchingroutinespro.JavaObjects.Stretch;
 
 /**
  * Created by Carl on 7/16/2016.
  */
-public class UpdateRoutineInBackground extends AsyncTask<Void, Void, Void> {
-    private static final String TAG = UpdateRoutineInBackground.class.getSimpleName();
+public class StoreRoutineInBackground  extends AsyncTask<Void, Void, Void> {
+    private static final String TAG = StoreRoutineInBackground.class.getSimpleName();
 
     private ArrayList<Stretch> stretches;
     private int routineId;
@@ -27,9 +27,9 @@ public class UpdateRoutineInBackground extends AsyncTask<Void, Void, Void> {
 
     private ProgressDialog dialog;
 
-    public UpdateRoutineInBackground(ArrayList<Stretch> stretches, int routineId,
-                                     StretchesDBHelper stretchesDBHelper, Context context,
-                                     StoringRoutineComplete callback) {
+    public StoreRoutineInBackground(ArrayList<Stretch> stretches, int routineId,
+                                    StretchesDBHelper stretchesDBHelper, Context context,
+                                    StoringRoutineComplete callback) {
         this.stretches = stretches;
         this.routineId = routineId;
         this.stretchesDBHelper = stretchesDBHelper;
@@ -41,7 +41,7 @@ public class UpdateRoutineInBackground extends AsyncTask<Void, Void, Void> {
     protected void onPreExecute() {
         super.onPreExecute();
         dialog = new ProgressDialog(context);
-        dialog.setMessage("Updating Data");
+        dialog.setMessage("Storing Data");
         dialog.show();
     }
 
@@ -70,25 +70,23 @@ public class UpdateRoutineInBackground extends AsyncTask<Void, Void, Void> {
             SQLiteDatabase db = stretchesDBHelper.getWritableDatabase();
             /* Insert stretch into db */
             ContentValues cv = new ContentValues();
-
-            /* Check on the stretch id */
-            cv.put(DBTableConstants.STRETCH_ID, stretch.id);
             cv.put(DBTableConstants.STRETCH_NAME, stretch.getName());
             cv.put(DBTableConstants.STRETCH_IMAGE, bytes);
             cv.put(DBTableConstants.STRETCH_DURATION, stretch.getDuration());
             cv.put(DBTableConstants.STRETCH_INSTRUCTION, stretch.getInstructions());
-            int stretchId = (int) db.insertWithOnConflict(DBTableConstants.STRETCH_TABLE_NAME, null, cv, SQLiteDatabase.CONFLICT_REPLACE);
+            int stretchId = (int) db.insert(DBTableConstants.STRETCH_TABLE_NAME, null, cv);
 
             /* TODO check stretch id */
             db.close();
 
             db = stretchesDBHelper.getWritableDatabase();
 
+
             /* Insert routine Id and stretch ID into db */
             ContentValues contentValues = new ContentValues();
             contentValues.put(DBTableConstants.ROUTINE_ID, routineId);
             contentValues.put(DBTableConstants.STRETCH_ID, stretchId);
-            db.insertWithOnConflict(DBTableConstants.ROUTINE_STRETCH_TABLE, null, contentValues, SQLiteDatabase.CONFLICT_REPLACE);
+            db.insert(DBTableConstants.ROUTINE_STRETCH_TABLE, null, contentValues);
             db.close();
         }
         Log.i(TAG, "Stored stretches");
