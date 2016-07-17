@@ -13,15 +13,15 @@
 
         app:civ_border_width="2dp"
         app:civ_border_color="@color/primary"
-        android:id="@+id/img_routine"
+        android:id="@+id/imgRoutine"
         android:layout_centerVertical="true" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
-        android:layout_toRightOf="@+id/img_routine"
-        android:layout_toEndOf="@+id/img_routine"
+        android:layout_toRightOf="@+id/imgRoutine"
+        android:layout_toEndOf="@+id/imgRoutine"
         android:id="@+id/tv_routine"
         android:layout_marginLeft="@dimen/routine_text_margin_left"
         android:textSize="@dimen/routine_text_size"

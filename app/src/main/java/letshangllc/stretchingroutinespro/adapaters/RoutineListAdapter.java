@@ -41,7 +41,7 @@ public class RoutineListAdapter extends ArrayAdapter<RoutineItem> {
             viewHolder = new ViewHolder();
             LayoutInflater inflater = LayoutInflater.from(getContext());
             convertView = inflater.inflate(R.layout.item_routine, parent, false);
-            viewHolder.routineImg = (CircleImageView) convertView.findViewById(R.id.img_routine);
+            viewHolder.routineImg = (CircleImageView) convertView.findViewById(R.id.imgRoutine);
             viewHolder.routineName = (TextView) convertView.findViewById(R.id.tv_routine);
             convertView.setTag(viewHolder);
         } else {

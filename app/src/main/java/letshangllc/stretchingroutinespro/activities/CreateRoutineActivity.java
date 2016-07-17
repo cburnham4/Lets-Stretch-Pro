@@ -1,10 +1,14 @@
 package letshangllc.stretchingroutinespro.activities;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.ContentValues;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
+import android.net.Uri;
+import android.provider.MediaStore;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -17,18 +21,21 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
-import letshangllc.stretchingroutinespro.Data.DBTableConstants;
-import letshangllc.stretchingroutinespro.Data.StretchesDBHelper;
+import letshangllc.stretchingroutinespro.data.DBTableConstants;
+import letshangllc.stretchingroutinespro.data.StretchesDBHelper;
 import letshangllc.stretchingroutinespro.JavaObjects.Stretch;
 import letshangllc.stretchingroutinespro.R;
 import letshangllc.stretchingroutinespro.adapaters.StretchesAdapter;
 import letshangllc.stretchingroutinespro.dialogs.AddStretchDialog;
 import letshangllc.stretchingroutinespro.dialogs.EditStretchDialog;
+import letshangllc.stretchingroutinespro.helpers.DbBitmapUtility;
 import letshangllc.stretchingroutinespro.helpers.StoreRoutineInBackground;
 import letshangllc.stretchingroutinespro.helpers.StoringRoutineComplete;
 
@@ -37,8 +44,10 @@ public class CreateRoutineActivity extends AppCompatActivity {
 
     private ArrayList<Stretch> stretches;
 
-    /* ListView for the stretches */
+    /* Views */
     private ListView lvStretches;
+    private EditText etRoutineName;
+    private ImageView imgRoutine;
 
     /* ListView Adapter*/
     private StretchesAdapter stretchesAdapter;
@@ -46,11 +55,13 @@ public class CreateRoutineActivity extends AppCompatActivity {
     /* DataBaseHelper */
     private StretchesDBHelper stretchesDBHelper;
 
-    /* Routine Name EditText */
-    private EditText etRoutineName;
 
     /* Progress Dialog */
     private ProgressDialog progressDialog;
+
+    private static final int SELECT_ROUTINE_PICTURE = 2;
+
+    private Bitmap routineBitmap;
 
 
     @Override
@@ -95,6 +106,8 @@ public class CreateRoutineActivity extends AppCompatActivity {
         lvStretches.setAdapter(stretchesAdapter);
 
         etRoutineName = (EditText) findViewById(R.id.etRoutineName);
+
+        imgRoutine = (ImageView) findViewById(R.id.imgRoutine);
     }
 
     public void addStretchOnClick(View view) {
@@ -139,6 +152,9 @@ public class CreateRoutineActivity extends AppCompatActivity {
 
         ContentValues cv = new ContentValues();
         cv.put(DBTableConstants.ROUTINE_NAME, routineName);
+        if(routineBitmap!=null){
+            cv.put(DBTableConstants.ROUTINE_IMAGE, DbBitmapUtility.getBytes(routineBitmap));
+        }
 
         int routineId = (int) db.insert(DBTableConstants.ROUTINE_TABLE_NAME, null, cv);
         Log.i(TAG, "Routine ID: " + routineId);
@@ -228,7 +244,48 @@ public class CreateRoutineActivity extends AppCompatActivity {
     }
 
     public void changeRoutinePhotoOnClick(View view){
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(Intent.createChooser(intent,
+                "Select Picture"), SELECT_ROUTINE_PICTURE);
+    }
 
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == Activity.RESULT_OK) {
+            if (requestCode == SELECT_ROUTINE_PICTURE) {
+                if(data == null ){
+                    Log.e(TAG, "Data Null");
+                }
+                routineBitmap = null;
+                try {
+                    Uri selectedImageUri = data.getData();
+                    String selectedImagePath = selectedImageUri.getPath();
+                    Log.i(TAG, "PATH: " + selectedImagePath);
+                    Bitmap bitmap1 = (Bitmap) MediaStore.Images.Media.getBitmap(this.getContentResolver(), data.getData());
+                    double width = bitmap1.getWidth()* 1.0;
+                    double height = bitmap1.getHeight() * 1.0;
+
+                    double largestXY = 512.0;
+                    if(width>largestXY || height>largestXY){
+                        if(width>height){
+                            double scale = largestXY/height;
+                            routineBitmap = Bitmap.createScaledBitmap(bitmap1,(int) (scale*width),
+                                    (int)  (height*scale), true);
+                        }else{
+                            double scale = largestXY/width;
+                            routineBitmap = Bitmap.createScaledBitmap(bitmap1,(int) (scale*width),
+                                    (int)  (height*scale), true);
+                        }
+
+                    }
+
+                    imgRoutine.setImageBitmap(routineBitmap);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 
 

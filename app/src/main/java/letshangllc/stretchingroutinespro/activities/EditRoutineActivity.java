@@ -24,8 +24,8 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
-import letshangllc.stretchingroutinespro.Data.DBTableConstants;
-import letshangllc.stretchingroutinespro.Data.StretchesDBHelper;
+import letshangllc.stretchingroutinespro.data.DBTableConstants;
+import letshangllc.stretchingroutinespro.data.StretchesDBHelper;
 import letshangllc.stretchingroutinespro.JavaObjects.Stretch;
 import letshangllc.stretchingroutinespro.R;
 import letshangllc.stretchingroutinespro.adapaters.StretchesAdapter;

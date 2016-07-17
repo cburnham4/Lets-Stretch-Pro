@@ -1,4 +1,4 @@
-package letshangllc.stretchingroutinespro.Data;
+package letshangllc.stretchingroutinespro.data;
 
 /**
  * Created by cvburnha on 6/22/2016.

@@ -21,9 +21,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Locale;
 
-import letshangllc.stretchingroutinespro.Data.DBTableConstants;
-import letshangllc.stretchingroutinespro.Data.RoutineStretches;
-import letshangllc.stretchingroutinespro.Data.StretchesDBHelper;
+import letshangllc.stretchingroutinespro.data.DBTableConstants;
+import letshangllc.stretchingroutinespro.data.RoutineStretches;
+import letshangllc.stretchingroutinespro.data.StretchesDBHelper;
 import letshangllc.stretchingroutinespro.JavaObjects.Stretch;
 import letshangllc.stretchingroutinespro.R;
 import letshangllc.stretchingroutinespro.helpers.DbBitmapUtility;
