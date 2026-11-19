@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Let\'s Stretch Pro</string>
+    <string name="select_stretch_routine">Select a stretch routine</string>
+    <string name="create_custom_routine">Create Custom Routine</string>
+    <string name="change_routine_photo">Change routine photo</string>
+    <string name="routine_name_hint">Routine Name</string>
+    <string name="add_stretch">Add Stretch</string>
+    <string name="add_routine">Add Routine</string>
+    <string name="add">Add</string>
+    <string name="cancel">Cancel</string>
+    <string name="discard">Discard</string>
+    <string name="delete">Delete</string>
+    <string name="edit">Edit</string>
+    <string name="delete_confirm">Delete this routine?</string>
+    <string name="stretch_name">Name</string>
+    <string name="seconds">Time (s)</string>
+    <string name="duration">Duration</string>
+    <string name="description">Description</string>
+    <string name="upload_photo">Upload Photo (Optional)</string>
+    <string name="photo_uploaded">Photo Uploaded</string>
+    <string name="routine_index_intent">RoutineIndexIntent</string>
+    <string name="routine_name_extra">RoutineNameExtra</string>
+</resources>

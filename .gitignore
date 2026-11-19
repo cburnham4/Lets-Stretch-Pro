@@ -6,6 +6,10 @@
 .DS_Store
 /build
 /captures
-/app/src/main/res/values/strings.xml
-/app/src/main/res/values/integers.xml
-
+.externalNativeBuild
+.cxx
+keystore.properties
+*.jks
+*.keystore
+.kotlin/
+local.properties

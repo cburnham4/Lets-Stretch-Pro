@@ -5,8 +5,6 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.ContextMenu;
@@ -17,15 +15,19 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+
 import java.util.ArrayList;
 
+import letshangllc.stretchingroutinespro.JavaObjects.RoutineItem;
+import letshangllc.stretchingroutinespro.R;
+import letshangllc.stretchingroutinespro.adapaters.RoutineListAdapter;
 import letshangllc.stretchingroutinespro.data.DBTableConstants;
 import letshangllc.stretchingroutinespro.data.Routines;
 import letshangllc.stretchingroutinespro.data.StretchesDBHelper;
-import letshangllc.stretchingroutinespro.R;
-import letshangllc.stretchingroutinespro.JavaObjects.RoutineItem;
-import letshangllc.stretchingroutinespro.adapaters.RoutineListAdapter;
 import letshangllc.stretchingroutinespro.helpers.DbBitmapUtility;
+import letshangllc.stretchingroutinespro.helpers.EdgeToEdgeHelper;
 
 public class MainActivity extends AppCompatActivity {
     private String TAG = MainActivity.class.getSimpleName();
@@ -38,11 +40,10 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        EdgeToEdgeHelper.apply(this, findViewById(R.id.mainRoot));
 
-        listView = (ListView) findViewById(R.id.lv_routines);
+        listView = findViewById(R.id.lv_routines);
         registerForContextMenu(listView);
-        //this.runAds();
-
     }
 
     public void addRoutinesFromDB(){
@@ -71,7 +72,7 @@ public class MainActivity extends AppCompatActivity {
             }
             c.moveToNext();
         }
-        routineListAdapter.notifyDataSetChanged();;
+        routineListAdapter.notifyDataSetChanged();
         c.close();
         sqLiteDatabase.close();
     }
@@ -91,12 +92,10 @@ public class MainActivity extends AppCompatActivity {
         routineListAdapter = new RoutineListAdapter(this, routineItems);
 
         listView.setAdapter(routineListAdapter);
-        //addRoutinesFromDB();
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> a, View v, int position, long id) {
-                /* When a day is selected go to the Lifts Activity */
                 Log.i(TAG, "Item Clicked");
                 Intent intent = new Intent(MainActivity.this, StretchActivity.class);
 
@@ -122,16 +121,18 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onContextItemSelected(MenuItem item) {
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
-        switch (item.getItemId()) {
-            case R.id.edit:
-                editRoutine(routineItems.get((int) info.id));
-                return true;
-            case R.id.delete:
-                confirmDelete(routineItems.get((int) info.id));
-                return true;
-            default:
-                return super.onContextItemSelected(item);
+        if (info == null) {
+            return super.onContextItemSelected(item);
         }
+        int itemId = item.getItemId();
+        if (itemId == R.id.edit) {
+            editRoutine(routineItems.get((int) info.id));
+            return true;
+        } else if (itemId == R.id.delete) {
+            confirmDelete(routineItems.get((int) info.id));
+            return true;
+        }
+        return super.onContextItemSelected(item);
     }
 
     private void editRoutine(RoutineItem routineItem){
@@ -172,13 +173,11 @@ public class MainActivity extends AppCompatActivity {
 
         SQLiteDatabase db = dbHelper.getWritableDatabase();
 
-        /* Delete from Exercise table and routines table by using exercise id */
         db.delete(DBTableConstants.ROUTINE_STRETCH_TABLE, DBTableConstants.ROUTINE_ID + " = " + routineId, null);
         db.delete(DBTableConstants.ROUTINE_TABLE_NAME, DBTableConstants.ROUTINE_ID + " = " + routineId, null);
 
         db.close();
 
-        /* Remove item from list and update list view */
         routineItems.remove(routineItem);
         routineListAdapter.notifyDataSetChanged();
     }

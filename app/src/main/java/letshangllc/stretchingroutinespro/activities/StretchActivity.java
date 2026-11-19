@@ -4,29 +4,32 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
-import android.media.AudioManager;
+import android.media.AudioAttributes;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
-import android.os.CountDownTimer;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Locale;
 
+import letshangllc.stretchingroutinespro.JavaObjects.Stretch;
+import letshangllc.stretchingroutinespro.R;
 import letshangllc.stretchingroutinespro.data.DBTableConstants;
 import letshangllc.stretchingroutinespro.data.RoutineStretches;
 import letshangllc.stretchingroutinespro.data.StretchesDBHelper;
-import letshangllc.stretchingroutinespro.JavaObjects.Stretch;
-import letshangllc.stretchingroutinespro.R;
 import letshangllc.stretchingroutinespro.helpers.DbBitmapUtility;
+import letshangllc.stretchingroutinespro.helpers.EdgeToEdgeHelper;
 
 public class StretchActivity extends AppCompatActivity {
     private static final String TAG = StretchActivity.class.getSimpleName();
@@ -39,7 +42,6 @@ public class StretchActivity extends AppCompatActivity {
 
     private CountDownTimer countDownTimer;
 
-
     /* Alarm */
     private Ringtone r;
 
@@ -48,11 +50,11 @@ public class StretchActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_stretch);
+        EdgeToEdgeHelper.apply(this, findViewById(R.id.stretchRoot));
 
         Intent intent = getIntent();
         int routineId = intent.getIntExtra(getString(R.string.routine_index_intent), 0);
 
-        /* todo Add routine index */
         switch (routineId){
             case 99999:
                 stretches = new ArrayList<>(Arrays.asList(RoutineStretches.backStretches));
@@ -75,19 +77,17 @@ public class StretchActivity extends AppCompatActivity {
 
         getStretches(routineId);
 
-
         this.findViews();
         currentStretch = 0;
-
 
         startStretches();
     }
 
     private void findViews(){
-        tv_stretchName = (TextView) findViewById(R.id.tv_stretchName);
-        tv_instructions = (TextView) findViewById(R.id.tv_instructions);
-        img_stretch = (ImageView) findViewById(R.id.img_stretchPhoto);
-        tv_timer = (TextView) findViewById(R.id.tv_timer);
+        tv_stretchName = findViewById(R.id.tv_stretchName);
+        tv_instructions = findViewById(R.id.tv_instructions);
+        img_stretch = findViewById(R.id.img_stretchPhoto);
+        tv_timer = findViewById(R.id.tv_timer);
     }
 
     private void startStretches(){
@@ -108,8 +108,6 @@ public class StretchActivity extends AppCompatActivity {
             img_stretch.setImageDrawable(ContextCompat.getDrawable(this, stretch.getDrawableIndex()));
         }
 
-
-        //tv_timer.setText(stretch.getDuration() +"");
         startCountdown(stretch.getDuration()*1000);
     }
 
@@ -141,7 +139,6 @@ public class StretchActivity extends AppCompatActivity {
     public void getStretches(int routineId){
         StretchesDBHelper stretchesDBHelper = new StretchesDBHelper(this);
         SQLiteDatabase db = stretchesDBHelper.getReadableDatabase();
-         /* Query the db to get the muscle data */
 
         String sql = "SELECT *" +
                 " FROM " + DBTableConstants.STRETCH_TABLE_NAME +
@@ -151,10 +148,7 @@ public class StretchActivity extends AppCompatActivity {
                 " WHERE " + DBTableConstants.ROUTINE_STRETCH_TABLE + "." + DBTableConstants.ROUTINE_ID +
                 " = " + routineId;
 
-
         Cursor c = db.rawQuery(sql, null);
-
-
 
         Log.i(TAG, "Query count: "+ c.getCount());
         int i = 1;
@@ -162,10 +156,10 @@ public class StretchActivity extends AppCompatActivity {
         while(!c.isAfterLast()){
             Log.i(TAG, "Run: " + i++);
             Log.i(TAG, "Duration index: " + c.getColumnIndex(DBTableConstants.STRETCH_DURATION));
-            int duration = c.getInt(c.getColumnIndex(DBTableConstants.STRETCH_DURATION));
-            String instruction = c.getString(c.getColumnIndex(DBTableConstants.STRETCH_INSTRUCTION));
-            byte[] bytes = c.getBlob(c.getColumnIndex(DBTableConstants.STRETCH_IMAGE));
-            String name = c.getString(c.getColumnIndex(DBTableConstants.STRETCH_NAME));
+            int duration = c.getInt(c.getColumnIndexOrThrow(DBTableConstants.STRETCH_DURATION));
+            String instruction = c.getString(c.getColumnIndexOrThrow(DBTableConstants.STRETCH_INSTRUCTION));
+            byte[] bytes = c.getBlob(c.getColumnIndexOrThrow(DBTableConstants.STRETCH_IMAGE));
+            String name = c.getString(c.getColumnIndexOrThrow(DBTableConstants.STRETCH_NAME));
             if(bytes == null){
                 stretches.add(new Stretch(name, instruction, duration));
             }else{
@@ -181,24 +175,24 @@ public class StretchActivity extends AppCompatActivity {
     }
 
     private void playAlarm(){
-        /* Get the alarm tone */
         Uri alert = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
 
         if(alert == null){
-            // alert is null, using backup
             alert = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
 
-            // If notication is null the use ringtone
             if(alert == null) {
-                // alert backup is null, using 2nd backup
                 alert = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE);
             }
         }
 
         try {
-            /* Play the alarm */
             r = RingtoneManager.getRingtone(this, alert);
-            r.setStreamType(AudioManager.STREAM_ALARM);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                r.setAudioAttributes(new AudioAttributes.Builder()
+                        .setUsage(AudioAttributes.USAGE_ALARM)
+                        .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+                        .build());
+            }
             r.play();
         }catch (Exception e) {
             e.printStackTrace();
@@ -208,9 +202,13 @@ public class StretchActivity extends AppCompatActivity {
             public void run() {
                 try {
                     Thread.sleep(1000);
-                    r.stop();
+                    if (r != null) {
+                        r.stop();
+                    }
                 } catch (Exception e) {
-                    r.stop();
+                    if (r != null) {
+                        r.stop();
+                    }
                 }
 
             }
@@ -221,7 +219,9 @@ public class StretchActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        countDownTimer.cancel();
+        if (countDownTimer != null) {
+            countDownTimer.cancel();
+        }
         finish();
     }
 

@@ -1,18 +1,14 @@
 package letshangllc.stretchingroutinespro.activities;
 
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.net.Uri;
-import android.provider.MediaStore;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.Menu;
@@ -25,17 +21,22 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+
 import java.io.IOException;
 import java.util.ArrayList;
 
-import letshangllc.stretchingroutinespro.data.DBTableConstants;
-import letshangllc.stretchingroutinespro.data.StretchesDBHelper;
 import letshangllc.stretchingroutinespro.JavaObjects.Stretch;
 import letshangllc.stretchingroutinespro.R;
 import letshangllc.stretchingroutinespro.adapaters.StretchesAdapter;
+import letshangllc.stretchingroutinespro.data.DBTableConstants;
+import letshangllc.stretchingroutinespro.data.StretchesDBHelper;
 import letshangllc.stretchingroutinespro.dialogs.AddStretchDialog;
 import letshangllc.stretchingroutinespro.dialogs.EditStretchDialog;
 import letshangllc.stretchingroutinespro.helpers.DbBitmapUtility;
+import letshangllc.stretchingroutinespro.helpers.EdgeToEdgeHelper;
 import letshangllc.stretchingroutinespro.helpers.StoreRoutineInBackground;
 import letshangllc.stretchingroutinespro.helpers.StoringRoutineComplete;
 
@@ -55,10 +56,6 @@ public class CreateRoutineActivity extends AppCompatActivity {
     /* DataBaseHelper */
     private StretchesDBHelper stretchesDBHelper;
 
-
-    /* Progress Dialog */
-    private ProgressDialog progressDialog;
-
     private static final int SELECT_ROUTINE_PICTURE = 2;
 
     private Bitmap routineBitmap;
@@ -68,6 +65,7 @@ public class CreateRoutineActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_routine);
+        EdgeToEdgeHelper.apply(this, findViewById(R.id.createRoutineRoot));
 
         this.setupToolbar();
 
@@ -78,16 +76,15 @@ public class CreateRoutineActivity extends AppCompatActivity {
     }
 
     private void setupToolbar() {
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         setTitle("Create Routine");
 
-        this.getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_clear_black_24dp);
-        if (toolbar != null) {
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_clear_black_24dp);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
-        assert toolbar != null;
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -97,7 +94,7 @@ public class CreateRoutineActivity extends AppCompatActivity {
     }
 
     public void setupViews() {
-        lvStretches = (ListView) findViewById(R.id.lvStretches);
+        lvStretches = findViewById(R.id.lvStretches);
 
         registerForContextMenu(lvStretches);
 
@@ -105,9 +102,9 @@ public class CreateRoutineActivity extends AppCompatActivity {
 
         lvStretches.setAdapter(stretchesAdapter);
 
-        etRoutineName = (EditText) findViewById(R.id.etRoutineName);
+        etRoutineName = findViewById(R.id.etRoutineName);
 
-        imgRoutine = (ImageView) findViewById(R.id.imgRoutine);
+        imgRoutine = findViewById(R.id.imgRoutine);
     }
 
     public void addStretchOnClick(View view) {
@@ -125,7 +122,6 @@ public class CreateRoutineActivity extends AppCompatActivity {
         addStretchDialog.show(getSupportFragmentManager(), TAG);
     }
 
-    /* todo store routine image */
     public void storeRoutineData(){
         String routineName = etRoutineName.getText().toString();
         if(routineName.isEmpty()){
@@ -172,14 +168,11 @@ public class CreateRoutineActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle item selection
-        switch (item.getItemId()) {
-            case R.id.complete:
-                storeRoutineData();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
+        if (item.getItemId() == R.id.complete) {
+            storeRoutineData();
+            return true;
         }
+        return super.onOptionsItemSelected(item);
     }
 
     private void confirmDiscard(){
@@ -189,7 +182,6 @@ public class CreateRoutineActivity extends AppCompatActivity {
         builder.setPositiveButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                /* Finish the exercise upon discarding */
                 dialog.cancel();
             }
         }).setNegativeButton(R.string.discard, new DialogInterface.OnClickListener() {
@@ -213,17 +205,19 @@ public class CreateRoutineActivity extends AppCompatActivity {
     @Override
     public boolean onContextItemSelected(MenuItem item) {
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
-        switch (item.getItemId()) {
-            case R.id.edit:
-                editStretch(stretches.get((int) info.id));
-                return true;
-            case R.id.delete:
-                stretches.remove((int) info.id);
-                stretchesAdapter.notifyDataSetChanged();
-                return true;
-            default:
-                return super.onContextItemSelected(item);
+        if (info == null) {
+            return super.onContextItemSelected(item);
         }
+        int itemId = item.getItemId();
+        if (itemId == R.id.edit) {
+            editStretch(stretches.get((int) info.id));
+            return true;
+        } else if (itemId == R.id.delete) {
+            stretches.remove((int) info.id);
+            stretchesAdapter.notifyDataSetChanged();
+            return true;
+        }
+        return super.onContextItemSelected(item);
     }
 
     public void editStretch(final Stretch stretch){
@@ -258,13 +252,15 @@ public class CreateRoutineActivity extends AppCompatActivity {
             if (requestCode == SELECT_ROUTINE_PICTURE) {
                 if(data == null ){
                     Log.e(TAG, "Data Null");
+                    return;
                 }
                 routineBitmap = null;
                 try {
                     Uri selectedImageUri = data.getData();
-                    String selectedImagePath = selectedImageUri.getPath();
-                    Log.i(TAG, "PATH: " + selectedImagePath);
-                    Bitmap bitmap1 = (Bitmap) MediaStore.Images.Media.getBitmap(this.getContentResolver(), data.getData());
+                    if (selectedImageUri != null) {
+                        Log.i(TAG, "PATH: " + selectedImageUri.getPath());
+                    }
+                    Bitmap bitmap1 = MediaStore.Images.Media.getBitmap(this.getContentResolver(), data.getData());
                     double width = bitmap1.getWidth()* 1.0;
                     double height = bitmap1.getHeight() * 1.0;
 
@@ -280,6 +276,8 @@ public class CreateRoutineActivity extends AppCompatActivity {
                                     (int)  (height*scale), true);
                         }
 
+                    } else {
+                        routineBitmap = bitmap1;
                     }
 
                     imgRoutine.setImageBitmap(routineBitmap);
@@ -289,8 +287,5 @@ public class CreateRoutineActivity extends AppCompatActivity {
             }
         }
     }
-
-
-
 
 }
